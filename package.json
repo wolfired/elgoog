@@ -1,0 +1,21 @@
+{
+  "name": "elgoog",
+  "version": "0.0.1",
+  "description": "!!elgoog dliuB",
+  "scripts": {
+    "build": "tsc && node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wolfired/elgoog.git"
+  },
+  "author": "LinkWu <wjianl@qq.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wolfired/elgoog/issues"
+  },
+  "homepage": "https://github.com/wolfired/elgoog#readme",
+  "dependencies": {
+    "@types/node": "^10.5.1"
+  }
+}

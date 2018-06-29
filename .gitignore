@@ -1,0 +1,9 @@
+/built
+/node_modules
+/v8
+/angle
+
+/.gclient_entries
+
+*.js
+*.pc
