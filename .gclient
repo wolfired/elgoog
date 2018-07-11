@@ -20,13 +20,5 @@ solutions = [
       "v8/tools/swarming_client"              : None,
     },
     "custom_vars": {},
-  },
-  {
-    "name": "angle",
-    "url": "https://chromium.googlesource.com/angle/angle.git",
-    "deps_file": "DEPS",
-    "managed": False,
-    "custom_deps": {},
-    "custom_vars": {},
   }
 ]
