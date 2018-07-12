@@ -41,9 +41,11 @@ function init(): void {
 
 export function build() {
     exec_cmd("git", ["clone", PRJ_GIT_URL]);
+    fs.createReadStream(".gclient_angle").pipe(fs.createWriteStream(path.join(ROOT_PRJ, ".gclient_angle")));
+    exec_cmd("gclient", ["--gclientfile=.gclient_angle", "sync"], ROOT_PRJ);
 
     init();
-    exec_cmd("gclient", ["sync"], ROOT_PRJ);
+
     exec_cmd("gn", ["gen", ROOT_OUT, `--args=${GN_ARGS.join(" ")}`], ROOT_PRJ);
     exec_cmd("ninja", ["-C", ROOT_OUT], ROOT_PRJ);
 }

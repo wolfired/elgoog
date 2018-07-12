@@ -74,8 +74,10 @@ function write_pc(): void {
 }
 
 export function build() {
+    exec_cmd("gclient", ["--gclientfile=.gclient_v8", "sync"]);
+
     init();
-    exec_cmd("gclient", ["sync"]);
+
     exec_cmd("gn", ["gen", ROOT_OUT, `--args=${GN_ARGS.join(" ")}`], ROOT_PRJ);
     exec_cmd("ninja", ["-C", ROOT_OUT, "v8_monolith"], ROOT_PRJ);
     write_pc();
