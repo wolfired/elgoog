@@ -42,7 +42,7 @@ function init(): void {
 export function build() {
     exec_cmd("git", ["clone", PRJ_GIT_URL]);
     fs.createReadStream(".gclient_angle").pipe(fs.createWriteStream(path.join(ROOT_PRJ, ".gclient_angle")));
-    exec_cmd("gclient", [`--gclientfile=${path.join(ROOT_PRJ, ".gclient_angle")}`, "sync"], ROOT_PRJ);
+    exec_cmd("gclient", ["sync", `--gclientfile=.gclient_angle`], ROOT_PRJ);
 
     init();
 

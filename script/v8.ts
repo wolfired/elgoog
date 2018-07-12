@@ -74,7 +74,7 @@ function write_pc(): void {
 }
 
 export function build() {
-    exec_cmd("gclient", [`--gclientfile=${path.join(ROOT, ".gclient_v8")}`, "sync"]);
+    exec_cmd("gclient", ["sync", `--gclientfile=.gclient_v8`]);
 
     init();
 
