@@ -7,7 +7,7 @@ import { evn_get, evn_set, exec_cmd, ROOT } from "./env";
 
 const PRJ_GIT_URL: string = "https://chromium.googlesource.com/angle/angle.git";
 const ROOT_PRJ: string = path.join(ROOT, "angle");
-const ROOT_OUT: string = path.join(ROOT_PRJ, "out", "Debug");
+const ROOT_OUT: string = path.join(ROOT_PRJ, "out", "Release");
 
 const GN_ARGS: Array<string> = [
     `is_debug=false`,
@@ -40,8 +40,9 @@ function init(): void {
 }
 
 export function build() {
-    init();
     exec_cmd("git", ["clone", PRJ_GIT_URL]);
+
+    init();
     exec_cmd("gclient", ["sync"], ROOT_PRJ);
     exec_cmd("gn", ["gen", ROOT_OUT, `--args=${GN_ARGS.join(" ")}`], ROOT_PRJ);
     exec_cmd("ninja", ["-C", ROOT_OUT], ROOT_PRJ);

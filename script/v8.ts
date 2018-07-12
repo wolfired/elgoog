@@ -7,7 +7,7 @@ import { evn_get, evn_set, exec_cmd, ROOT } from "./env";
 
 const PRJ_GIT_URL: string = "https://chromium.googlesource.com/v8/v8.git";
 const ROOT_PRJ: string = path.join(ROOT, "v8");
-const ROOT_OUT: string = path.join(ROOT_PRJ, "out", "Debug");
+const ROOT_OUT: string = path.join(ROOT_PRJ, "out", "Release");
 
 const GN_ARGS: Array<string> = [
     `is_debug=false`,
@@ -70,7 +70,7 @@ function write_pc(): void {
 
     let pc: string = `Name: ${name}\nDescription: ${desc}\nVersion: ${vers}\nCflags: ${"-I" + path.join(ROOT_PRJ, "include")}\nLibs: ${"-L" + ROOT_OUT} ${libs}`;
 
-    fs.writeFileSync(path.join(ROOT, "v8.pc"), pc);
+    fs.writeFileSync(path.join(ROOT_OUT, "v8.pc"), pc);
 }
 
 export function build() {
