@@ -75,8 +75,7 @@ function write_pc(): void {
 
 export function build() {
     init();
-    exec_cmd("git", ["clone", PRJ_GIT_URL]);
-    exec_cmd("gclient", ["sync"], ROOT_PRJ);
+    exec_cmd("gclient", ["sync"]);
     exec_cmd("gn", ["gen", ROOT_OUT, `--args=${GN_ARGS.join(" ")}`], ROOT_PRJ);
     exec_cmd("ninja", ["-C", ROOT_OUT, "v8_monolith"], ROOT_PRJ);
     write_pc();

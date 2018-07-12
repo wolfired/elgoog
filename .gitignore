@@ -1,7 +1,6 @@
 /built
 /node_modules
-/v8/*
-!/v8/.gclient
+/v8
 /angle/*
 !/angle/.gclient
 
