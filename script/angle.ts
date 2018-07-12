@@ -7,7 +7,7 @@ import { evn_get, evn_set, exec_cmd, ROOT } from "./env";
 
 const PRJ_GIT_URL: string = "https://chromium.googlesource.com/angle/angle.git";
 const ROOT_PRJ: string = path.join(ROOT, "angle");
-const ROOT_OUT: string = path.join(ROOT_PRJ, "out", "Release");
+const PRJ_OUT: string = path.join(ROOT_PRJ, "out", "Release");
 
 const GN_ARGS: Array<string> = [
     `is_debug=false`,
@@ -34,18 +34,21 @@ function init(): void {
         }
     }
 
-    if (!fs.existsSync(ROOT_OUT)) {
-        fs.mkdirSync(ROOT_OUT);
+    if (!fs.existsSync(PRJ_OUT)) {
+        fs.mkdirSync(PRJ_OUT);
     }
 }
 
 export function build() {
-    exec_cmd("git", ["clone", PRJ_GIT_URL]);
-    fs.createReadStream(".gclient_angle").pipe(fs.createWriteStream(path.join(ROOT_PRJ, ".gclient_angle")));
+    if (!fs.existsSync(ROOT_PRJ)) {
+        exec_cmd("git", ["clone", PRJ_GIT_URL]);
+        fs.createReadStream(".gclient_angle").pipe(fs.createWriteStream(path.join(ROOT_PRJ, ".gclient_angle")));
+    }
+
     exec_cmd("gclient", ["sync", `--gclientfile=.gclient_angle`], ROOT_PRJ);
 
     init();
 
-    exec_cmd("gn", ["gen", ROOT_OUT, `--args=${GN_ARGS.join(" ")}`], ROOT_PRJ);
-    exec_cmd("ninja", ["-C", ROOT_OUT], ROOT_PRJ);
+    exec_cmd("gn", ["gen", PRJ_OUT, `--args=${GN_ARGS.join(" ")}`], ROOT_PRJ);
+    exec_cmd("ninja", ["-C", PRJ_OUT], ROOT_PRJ);
 }

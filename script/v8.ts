@@ -7,7 +7,7 @@ import { evn_get, evn_set, exec_cmd, ROOT } from "./env";
 
 const PRJ_GIT_URL: string = "https://chromium.googlesource.com/v8/v8.git";
 const ROOT_PRJ: string = path.join(ROOT, "v8");
-const ROOT_OUT: string = path.join(ROOT_PRJ, "out", "Release");
+const PRJ_OUT: string = path.join(ROOT_PRJ, "out", "Release");
 
 const GN_ARGS: Array<string> = [
     `is_debug=false`,
@@ -57,8 +57,8 @@ function init(): void {
         }
     }
 
-    if (!fs.existsSync(ROOT_OUT)) {
-        fs.mkdirSync(ROOT_OUT);
+    if (!fs.existsSync(PRJ_OUT)) {
+        fs.mkdirSync(PRJ_OUT);
     }
 }
 
@@ -68,9 +68,9 @@ function write_pc(): void {
     let vers: string = "x.xx.xxx"
     let libs: string = "-lv8_monolith";
 
-    let pc: string = `Name: ${name}\nDescription: ${desc}\nVersion: ${vers}\nCflags: ${"-I" + path.join(ROOT_PRJ, "include")}\nLibs: ${"-L" + ROOT_OUT} ${libs}`;
+    let pc: string = `Name: ${name}\nDescription: ${desc}\nVersion: ${vers}\nCflags: ${"-I" + path.join(ROOT_PRJ, "include")}\nLibs: ${"-L" + PRJ_OUT} ${libs}`;
 
-    fs.writeFileSync(path.join(ROOT_OUT, "v8.pc"), pc);
+    fs.writeFileSync(path.join(PRJ_OUT, "v8.pc"), pc);
 }
 
 export function build() {
@@ -78,7 +78,7 @@ export function build() {
 
     init();
 
-    exec_cmd("gn", ["gen", ROOT_OUT, `--args=${GN_ARGS.join(" ")}`], ROOT_PRJ);
-    exec_cmd("ninja", ["-C", ROOT_OUT, "v8_monolith"], ROOT_PRJ);
+    exec_cmd("gn", ["gen", PRJ_OUT, `--args=${GN_ARGS.join(" ")}`], ROOT_PRJ);
+    exec_cmd("ninja", ["-C", PRJ_OUT, "v8_monolith"], ROOT_PRJ);
     write_pc();
 }
