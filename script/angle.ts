@@ -42,8 +42,9 @@ function init(): void {
 export function build() {
     if (!fs.existsSync(ROOT_PRJ)) {
         exec_cmd("git", ["clone", PRJ_GIT_URL]);
-        fs.createReadStream(".gclient_angle").pipe(fs.createWriteStream(path.join(ROOT_PRJ, ".gclient_angle")));
     }
+
+    fs.copyFileSync(".gclient_angle", path.join(ROOT_PRJ, ".gclient_angle"));
 
     exec_cmd("gclient", ["sync", `--gclientfile=.gclient_angle`], ROOT_PRJ);
 
