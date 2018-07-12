@@ -51,5 +51,5 @@ export function build() {
     init();
 
     exec_cmd("gn", ["gen", PRJ_OUT, `--args=${GN_ARGS.join(" ")}`], ROOT_PRJ);
-    exec_cmd("ninja", ["-C", PRJ_OUT], ROOT_PRJ);
+    exec_cmd("ninja", ["-C", PRJ_OUT, "libEGL", "libGLESv2"], ROOT_PRJ);
 }
