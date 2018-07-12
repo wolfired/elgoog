@@ -3,6 +3,5 @@
 /v8
 /angle
 
-/.gclient_entries
-
+.gclient_*_entries
 *.js
