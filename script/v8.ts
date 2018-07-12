@@ -5,20 +5,6 @@ import * as process from "process";
 
 import { PLATFORM_WIN32, PLATFORM_LINUX, PLATFORM_DARWIN, evn_get, evn_set } from "./env";
 
-const ENV_DEPOT_TOOLS_ROOT = "DEPOT_TOOLS_ROOT";
-
-if (
-    2 < process.argv.length
-    || void 0 === evn_get(ENV_DEPOT_TOOLS_ROOT)
-) {
-    console.log(`
-${ENV_DEPOT_TOOLS_ROOT}: 
-`);
-    process.exit(0);
-}
-
-const ROOT_DEPOT_TOOLS: string = evn_get(ENV_DEPOT_TOOLS_ROOT)!;
-
 const ROOT: string = process.cwd();
 const ROOT_BUILT: string = path.join(ROOT, "built");
 const ROOT_V8: string = path.join(ROOT, "v8");
@@ -77,19 +63,11 @@ function init(): void {
 }
 
 function depot_tools_exec(cmd: string, args?: Array<string>, cwd?: string): void {
-    if (PLATFORM_WIN32 === process.platform) {
-        if (fs.existsSync(path.join(ROOT_DEPOT_TOOLS, cmd + ".bat"))) {
-            cmd += ".bat";
-        } else if (fs.existsSync(path.join(ROOT_DEPOT_TOOLS, cmd + ".exe"))) {
-            cmd += ".exe";
-        }
-    }
-
     if (void 0 === cwd) {
         cwd = ROOT;
     }
 
-    spawnSync(path.join(ROOT_DEPOT_TOOLS, cmd), args, { cwd: cwd, stdio: [null, process.stdout, process.stderr], env: process.env });
+    spawnSync(cmd, args, { cwd: cwd, stdio: [null, process.stdout, process.stderr], env: process.env });
 }
 
 function write_pc(): void {
