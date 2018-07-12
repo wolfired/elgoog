@@ -1,13 +1,13 @@
-import { spawnSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 import * as process from "process";
 
-import { PLATFORM_WIN32, PLATFORM_LINUX, PLATFORM_DARWIN, evn_get, evn_set } from "./env";
+import { PLATFORM_WIN32, PLATFORM_LINUX, PLATFORM_DARWIN } from "./env";
+import { evn_get, evn_set, exec_cmd, ROOT } from "./env";
 
-const ROOT: string = process.cwd();
-const ROOT_BUILT: string = path.join(ROOT, "built");
-const ROOT_V8: string = path.join(ROOT, "v8");
+const PRJ_GIT_URL: string = "https://chromium.googlesource.com/v8/v8.git";
+const ROOT_PRJ: string = path.join(ROOT, "v8");
+const ROOT_OUT: string = path.join(ROOT_PRJ, "out", "Debug");
 
 const GN_ARGS: Array<string> = [
     `is_debug=false`,
@@ -57,17 +57,9 @@ function init(): void {
         }
     }
 
-    if (!fs.existsSync(ROOT_BUILT)) {
-        fs.mkdirSync(ROOT_BUILT);
+    if (!fs.existsSync(ROOT_OUT)) {
+        fs.mkdirSync(ROOT_OUT);
     }
-}
-
-function depot_tools_exec(cmd: string, args?: Array<string>, cwd?: string): void {
-    if (void 0 === cwd) {
-        cwd = ROOT;
-    }
-
-    spawnSync(cmd, args, { cwd: cwd, stdio: [null, process.stdout, process.stderr], env: process.env });
 }
 
 function write_pc(): void {
@@ -76,15 +68,16 @@ function write_pc(): void {
     let vers: string = "x.xx.xxx"
     let libs: string = "-lv8_monolith";
 
-    let pc: string = `Name: ${name}\nDescription: ${desc}\nVersion: ${vers}\nCflags: ${"-I" + path.join(ROOT_V8, "include")}\nLibs: ${"-L" + ROOT_BUILT} ${libs}`;
+    let pc: string = `Name: ${name}\nDescription: ${desc}\nVersion: ${vers}\nCflags: ${"-I" + path.join(ROOT_PRJ, "include")}\nLibs: ${"-L" + ROOT_OUT} ${libs}`;
 
     fs.writeFileSync(path.join(ROOT, "v8.pc"), pc);
 }
 
 export function build() {
     init();
-    depot_tools_exec("gclient", ["sync"]);
-    depot_tools_exec("gn", ["gen", ROOT_BUILT, `--args=${GN_ARGS.join(" ")}`], ROOT_V8);
-    depot_tools_exec("ninja", ["-C", ROOT_BUILT, "v8_monolith"], ROOT_V8);
+    exec_cmd("git", ["clone", PRJ_GIT_URL]);
+    exec_cmd("gclient", ["sync"], ROOT_PRJ);
+    exec_cmd("gn", ["gen", ROOT_OUT, `--args=${GN_ARGS.join(" ")}`], ROOT_PRJ);
+    exec_cmd("ninja", ["-C", ROOT_OUT, "v8_monolith"], ROOT_PRJ);
     write_pc();
 }
