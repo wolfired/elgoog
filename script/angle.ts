@@ -8,10 +8,10 @@ import { evn_get, evn_set, exec_cmd, ROOT } from "./env";
 
 const PRJ_GIT_URL: string = "https://chromium.googlesource.com/angle/angle.git";
 const ROOT_PRJ: string = path.join(ROOT, "angle");
-const PRJ_OUT: string = path.join(ROOT_PRJ, "out", "Release");
+const PRJ_OUT: string = path.join(ROOT_PRJ, "out", "Debug");
 
 const GN_ARGS: Array<string> = [
-    `is_debug=false`,
+    `is_debug=true`,
     `target_cpu="x64"`,
     `is_component_build=false`,
 ];
@@ -57,9 +57,7 @@ export function build() {
         exec_cmd(git, ["clone", PRJ_GIT_URL]);
     }
 
-    fs.copyFileSync(".gclient_angle", path.join(ROOT_PRJ, ".gclient_angle"));
-
-    exec_cmd(gclient, ["sync", `--gclientfile=.gclient_angle`], ROOT_PRJ);
+    exec_cmd(gclient, ["sync", `--gclientfile=../.gclient_angle`], ROOT_PRJ);
 
     init();
 
