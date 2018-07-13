@@ -3,6 +3,7 @@ import * as path from "path";
 import * as process from "process";
 
 import { PLATFORM_WIN32, PLATFORM_LINUX, PLATFORM_DARWIN } from "./env";
+import { gclient, gn, ninja } from "./env";
 import { evn_get, evn_set, exec_cmd, ROOT } from "./env";
 
 const PRJ_GIT_URL: string = "https://chromium.googlesource.com/v8/v8.git";
@@ -11,6 +12,7 @@ const PRJ_OUT: string = path.join(ROOT_PRJ, "out", "Release");
 
 const GN_ARGS: Array<string> = [
     `is_debug=false`,
+    `target_cpu="x64"`,
     `v8_target_cpu="x64"`,
     `is_component_build=false`,
     `v8_static_library=false`,
@@ -57,6 +59,12 @@ function init(): void {
         }
     }
 
+    let out: string = path.join(ROOT_PRJ, "out");
+
+    if (!fs.existsSync(out)) {
+        fs.mkdirSync(out);
+    }
+
     if (!fs.existsSync(PRJ_OUT)) {
         fs.mkdirSync(PRJ_OUT);
     }
@@ -74,11 +82,11 @@ function write_pc(): void {
 }
 
 export function build() {
-    exec_cmd("gclient", ["sync", `--gclientfile=.gclient_v8`]);
+    exec_cmd(gclient, ["sync", `--gclientfile=.gclient_v8`]);
 
     init();
 
-    exec_cmd("gn", ["gen", PRJ_OUT, `--args=${GN_ARGS.join(" ")}`], ROOT_PRJ);
-    exec_cmd("ninja", ["-C", PRJ_OUT, "v8_monolith"], ROOT_PRJ);
+    exec_cmd(gn, ["gen", PRJ_OUT, `--args=${GN_ARGS.join(" ")}`], ROOT_PRJ);
+    exec_cmd(ninja, ["-C", PRJ_OUT, "v8_monolith"], ROOT_PRJ);
     write_pc();
 }

@@ -5,6 +5,12 @@ export const PLATFORM_WIN32: string = "win32";
 export const PLATFORM_LINUX: string = "linux";
 export const PLATFORM_DARWIN: string = "darwin";
 
+export const git: string = ((): string => { return PLATFORM_WIN32 == process.platform ? "git.exe" : "git"; })();
+
+export const gclient: string = ((): string => { return PLATFORM_WIN32 == process.platform ? "gclient.bat" : "gclient"; })();
+export const gn: string = ((): string => { return PLATFORM_WIN32 == process.platform ? "gn.bat" : "gn"; })();
+export const ninja: string = ((): string => { return PLATFORM_WIN32 == process.platform ? "ninja.exe" : "ninja"; })();
+
 export const ROOT: string = process.cwd();
 
 export function evn_get(key: string, def?: string): string | undefined {
