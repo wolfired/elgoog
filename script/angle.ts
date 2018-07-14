@@ -22,10 +22,11 @@ function init_win32(): void {
     evn_set("GYP_MSVS_VERSION", "2017");
     evn_set("GYP_MSVS_OVERRIDE_PATH", "D:\\VS2017");
     evn_set("vs2017_install", evn_get("GYP_MSVS_OVERRIDE_PATH")!);
+
+    GN_ARGS.push(`is_clang=false`);
 }
 
 function init_linux(): void {
-    GN_ARGS.push(`clang=false`);
     GN_ARGS.push(`cc_wrapper="ccache"`);
 }
 
