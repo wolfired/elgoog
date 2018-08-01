@@ -42,7 +42,6 @@ function init_win32(): void {
 function init_linux(): void {
     GN_ARGS.push(`use_sysroot=false`);
     GN_ARGS.push(`use_custom_libcxx=false`);
-    GN_ARGS.push(`libcpp_is_static=false`);
     GN_ARGS.push(`v8_enable_gdbjit=false`);
     GN_ARGS.push(`cc_wrapper="ccache"`);
 }
