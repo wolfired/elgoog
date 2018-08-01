@@ -5,7 +5,7 @@ solutions = [
     "deps_file": "DEPS",
     "managed": False,
     "custom_deps": {
-      "tools/gyp"                          : None,
+      "./tools/gyp"                          : None,
     },
     "custom_vars": {},
   },
