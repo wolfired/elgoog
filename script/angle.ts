@@ -58,9 +58,8 @@ export function build() {
         exec_cmd(git, ["clone", PRJ_GIT_URL]);
     }
 
-    fs.copyFileSync(".gclient_angle", path.join(ROOT_PRJ, ".gclient_angle"));
-
-    exec_cmd(gclient, ["sync", `--gclientfile=.gclient_angle`], ROOT_PRJ);
+    fs.copyFileSync(".gclient_angle", path.join(ROOT_PRJ, ".gclient"));
+    exec_cmd(gclient, ["sync"], ROOT_PRJ);
 
     init();
 
