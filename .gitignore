@@ -1,7 +1,7 @@
-/built
+/.vscode
+/angle
+/lib
 /node_modules
 /v8
-/angle
 
 .gclient_*_entries
-*.js
